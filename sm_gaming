@@ -28,7 +28,7 @@ install_app() {
 # Function to launch the app
 launch_app() {
     echo "Launching the app..."
-    am start -n $PACKAGE_NAME/$PACKAGE_NAME.MainActivity
+    am start -n $(pm list packages | grep "$APP_NAME" | cut -d':' -f2 | tr -d '[:space]')/$PACKAGE_NAME.MainActivity
 }
 
 # Main function
