@@ -1,5 +1,24 @@
 #!/bin/bash
 
+# Check if Termux is installed
+if ! command -v pkg &> /dev/null; then
+    echo "Termux package manager (pkg) is not installed. Please install Termux first."
+    exit 1
+fi
+
+# Check if necessary packages are installed
+if ! pkg list-installed wget curl &> /dev/null; then
+    echo "Installing necessary packages..."
+    pkg install -y wget curl
+fi
+
+# Check if the Winlator app is already installed
+if pkg list-installed com.winlator &> /dev/null; then
+    echo "Winlator app is already installed. Launching..."
+    monkey -p com.winlator 1
+    exit 0
+fi
+
 # Download the APK file
 wget https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk -O Winlator_5.0.apk
 
@@ -7,4 +26,4 @@ wget https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.
 pkg install -y ./Winlator_5.0.apk
 
 # Launch the app
-am start -n com.winlator/.MainActivity
+monkey -p com.winlator 1
