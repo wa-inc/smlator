@@ -1,57 +1,44 @@
-#!/bin/bash
-
-# Install necessary packages
-pkg update -y && pkg upgrade -y
-pkg install wget termux-tools -y
+import os
+import subprocess
 
 # Define the APK URL
-APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
+APK_URL = "https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
 
 # Define the APK file name
-APK_FILE="Winlator_5.0.apk"
+APK_FILE = "Winlator_5.0.apk"
 
 # Define the command to launch the app
-LAUNCH_COMMAND="am start --user 0 -n com.winlator/.MainActivity"
+LAUNCH_COMMAND = "am start --user 0 -n com.winlator/.MainActivity"
 
 # Function to show the menu
-smgaming() {
-    echo "1. Launch Winlator"
-    echo "2. Uninstall the script"
-    echo -n "Please enter your choice: "
-    read choice
+def smgaming():
+    while True:
+        print("1. Launch Winlator")
+        print("2. Uninstall the script")
+        choice = input("Please enter your choice: ")
 
-    case $choice in
-        1)
-            echo "Launching Winlator..."
-            $LAUNCH_COMMAND
-            ;;
-        2)
-            echo "Uninstalling the script..."
-            rm $0
-            ;;
-        *)
-            echo "Invalid choice."
-            ;;
-    esac
-}
-
-# Add smgaming function to bash profile so it can be run at any time
-echo "smgaming() { $(typeset -f smgaming); }" >> ~/.bashrc
-
-# Source the bashrc file to make the smgaming function available immediately
-source ~/.bashrc
+        if choice == '1':
+            print("Launching Winlator...")
+            os.system(LAUNCH_COMMAND)
+            break
+        elif choice == '2':
+            print("Uninstalling the script...")
+            os.remove(__file__)
+            break
+        else:
+            print("Invalid choice.")
 
 # Check if the APK file exists in the current directory
-if [ ! -f "$APK_FILE" ]; then
-    echo "Downloading Winlator APK..."
-    wget $APK_URL
-fi
+if not os.path.isfile(APK_FILE):
+    print("Downloading Winlator APK...")
+    os.system(f'wget {APK_URL}')
 
 # Install the APK
-echo "Installing Winlator..."
-termux-setup-storage
-tsu
-pm install $APK_FILE
+print("Installing Winlator...")
+os.system('pkg install termux-tools')
+os.system('termux-setup-storage')
+os.system('tsu')
+os.system(f'pm install {APK_FILE}')
 
 # Show the menu
-smgaming
+smgaming()
