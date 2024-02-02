@@ -1,1 +1,10 @@
+#!/bin/bash
 
+# Download the APK file
+wget https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk -O Winlator_5.0.apk
+
+# Install the APK
+pkg install -y ./Winlator_5.0.apk
+
+# Launch the app
+am start -n com.winlator/.MainActivity
