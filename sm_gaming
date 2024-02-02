@@ -29,7 +29,6 @@ handle_choice() {
             ;;
         *)
             echo "Invalid choice. Please try again."
-            handle_choice
             ;;
     esac
 }
@@ -77,4 +76,9 @@ main() {
     done
 }
 
+# Save the script into a directory
+mkdir -p ~/bin
+cp "$0" ~/bin/smgaming
+
+# Main entry point
 main
