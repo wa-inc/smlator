@@ -15,7 +15,7 @@ fi
 # Check if the Winlator app is already installed
 if pkg list-installed com.winlator &> /dev/null; then
     echo "Winlator app is already installed. Launching..."
-    monkey -p com.winlator 1
+    am start -n com.winlator
     exit 0
 fi
 
@@ -26,4 +26,4 @@ wget https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.
 pkg install -y ./Winlator_5.0.apk
 
 # Launch the app
-monkey -p com.winlator 1
+am start -n com.winlator
