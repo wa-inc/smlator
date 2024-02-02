@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # Install necessary packages
-pkg update && pkg upgrade -y
-pkg install wget -y
-pkg install termux-tools -y
+pkg update -y && pkg upgrade -y
+pkg install wget termux-tools -y
 
 # Define the APK URL
 APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
@@ -13,18 +12,6 @@ APK_FILE="Winlator_5.0.apk"
 
 # Define the command to launch the app
 LAUNCH_COMMAND="am start --user 0 -n com.winlator/.MainActivity"
-
-# Check if the APK file exists in the current directory
-if [ ! -f "$APK_FILE" ]; then
-    echo "Downloading Winlator APK..."
-    wget $APK_URL
-fi
-
-# Install the APK
-echo "Installing Winlator..."
-termux-setup-storage
-tsu
-pm install $APK_FILE
 
 # Function to show the menu
 smgaming() {
@@ -50,6 +37,21 @@ smgaming() {
 
 # Add smgaming function to bash profile so it can be run at any time
 echo "smgaming() { $(typeset -f smgaming); }" >> ~/.bashrc
+
+# Source the bashrc file to make the smgaming function available immediately
+source ~/.bashrc
+
+# Check if the APK file exists in the current directory
+if [ ! -f "$APK_FILE" ]; then
+    echo "Downloading Winlator APK..."
+    wget $APK_URL
+fi
+
+# Install the APK
+echo "Installing Winlator..."
+termux-setup-storage
+tsu
+pm install $APK_FILE
 
 # Show the menu
 smgaming
