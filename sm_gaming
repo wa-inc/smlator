@@ -29,6 +29,7 @@ handle_choice() {
             ;;
         *)
             echo "Invalid choice. Please try again."
+            handle_choice
             ;;
     esac
 }
@@ -70,8 +71,10 @@ install_app() {
 # Main function
 main() {
     install_app
-    display_menu
-    handle_choice
+    while true; do
+        display_menu
+        handle_choice
+    done
 }
 
 main
