@@ -6,6 +6,9 @@ APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlato
 # Define the package name of the app
 PACKAGE_NAME="com.winlator"
 
+# Define the app name
+APP_NAME="Winlator"
+
 # Function to check if the app is installed
 is_app_installed() {
     if pm list packages | grep -q $PACKAGE_NAME; then
@@ -25,7 +28,7 @@ install_app() {
 # Function to launch the app
 launch_app() {
     echo "Launching the app..."
-    am start -n $PACKAGE_NAME
+    am start -n $PACKAGE_NAME/$PACKAGE_NAME.MainActivity
 }
 
 # Main function
