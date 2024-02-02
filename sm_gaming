@@ -25,7 +25,7 @@ install_app() {
 # Function to launch the app
 launch_app() {
     echo "Launching the app..."
-    am start -n $PACKAGE_NAME/.MainActivity
+    am start -n $PACKAGE_NAME
 }
 
 # Main function
