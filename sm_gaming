@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Install necessary packages
+pkg update && pkg upgrade -y
+pkg install wget -y
+pkg install termux-tools -y
+
 # Define the APK URL
 APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
 
@@ -17,7 +22,6 @@ fi
 
 # Install the APK
 echo "Installing Winlator..."
-pkg install termux-tools
 termux-setup-storage
 tsu
 pm install $APK_FILE
