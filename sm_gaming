@@ -1,84 +1,51 @@
 #!/bin/bash
 
-# Function to display the menu
-display_menu() {
-    echo "Welcome to SM Gaming!"
-    echo "Please select an option:"
-    echo "1. Open the Winlator app"
-    echo "2. Uninstall the Winlator app"
-    echo "3. Uninstall SM Gaming script"
-    echo "4. Exit"
-}
+# Define the APK URL
+APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
 
-# Function to handle the user's choice
-handle_choice() {
-    read -p "Enter your choice: " choice
+# Define the APK file name
+APK_FILE="Winlator_5.0.apk"
+
+# Define the command to launch the app
+LAUNCH_COMMAND="am start --user 0 -n com.winlator/.MainActivity"
+
+# Check if the APK file exists in the current directory
+if [ ! -f "$APK_FILE" ]; then
+    echo "Downloading Winlator APK..."
+    wget $APK_URL
+fi
+
+# Install the APK
+echo "Installing Winlator..."
+pkg install termux-tools
+termux-setup-storage
+tsu
+pm install $APK_FILE
+
+# Function to show the menu
+smgaming() {
+    echo "1. Launch Winlator"
+    echo "2. Uninstall the script"
+    echo -n "Please enter your choice: "
+    read choice
+
     case $choice in
         1)
-            open_app
+            echo "Launching Winlator..."
+            $LAUNCH_COMMAND
             ;;
         2)
-            uninstall_app
-            ;;
-        3)
-            uninstall_script
-            ;;
-        4)
-            echo "Exiting..."
-            exit 0
+            echo "Uninstalling the script..."
+            rm $0
             ;;
         *)
-            echo "Invalid choice. Please try again."
+            echo "Invalid choice."
             ;;
     esac
 }
 
-# Function to open the Winlator app
-open_app() {
-    if pkg list-installed com.winlator &> /dev/null; then
-        am start -n $(pm list packages -f | grep -i "com.winlator" | awk -F'=' '{print $1}' | xargs)
-    else
-        echo "The Winlator app is not installed."
-    fi
-}
+# Add smgaming function to bash profile so it can be run at any time
+echo "smgaming() { $(typeset -f smgaming); }" >> ~/.bashrc
 
-# Function to uninstall the Winlator app
-uninstall_app() {
-    if pkg list-installed com.winlator &> /dev/null; then
-        pm uninstall com.winlator
-        echo "The Winlator app has been uninstalled."
-    else
-        echo "The Winlator app is not installed."
-    fi
-}
-
-# Function to uninstall the SM Gaming script
-uninstall_script() {
-    echo "Uninstalling SM Gaming script..."
-    rm -f "$0"
-    echo "SM Gaming script has been uninstalled."
-}
-
-# Function to install the Winlator app
-install_app() {
-    echo "Installing the Winlator app..."
-    curl -LO https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk
-    pkg install -y ./Winlator_5.0.apk
-    echo "Winlator app has been installed."
-}
-
-# Main function
-main() {
-    install_app
-    while true; do
-        display_menu
-        handle_choice
-    done
-}
-
-# Save the script into a directory
-mkdir -p ~/bin
-cp "$0" ~/bin/smgaming
-
-# Main entry point
-main
+# Show the menu
+smgaming
