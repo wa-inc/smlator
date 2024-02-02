@@ -1,44 +1,42 @@
-import os
-import subprocess
+#!/bin/bash
 
-# Define the APK URL
-APK_URL = "https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
+# Define the URL of the APK file
+APK_URL="https://github.com/brunodev85/winlator/releases/download/v5.0.0/Winlator_5.0.apk"
 
-# Define the APK file name
-APK_FILE = "Winlator_5.0.apk"
+# Define the package name of the app
+PACKAGE_NAME="com.winlator"
 
-# Define the command to launch the app
-LAUNCH_COMMAND = "am start --user 0 -n com.winlator/.MainActivity"
+# Function to check if the app is installed
+is_app_installed() {
+    if pm list packages | grep -q $PACKAGE_NAME; then
+        return 0
+    else
+        return 1
+    fi
+}
 
-# Function to show the menu
-def smgaming():
-    while True:
-        print("1. Launch Winlator")
-        print("2. Uninstall the script")
-        choice = input("Please enter your choice: ")
+# Function to download and install the APK
+install_app() {
+    echo "Downloading and installing the app..."
+    curl -LO $APK_URL
+    termux-open Winlator_5.0.apk
+}
 
-        if choice == '1':
-            print("Launching Winlator...")
-            os.system(LAUNCH_COMMAND)
-            break
-        elif choice == '2':
-            print("Uninstalling the script...")
-            os.remove(__file__)
-            break
-        else:
-            print("Invalid choice.")
+# Function to launch the app
+launch_app() {
+    echo "Launching the app..."
+    am start -n $PACKAGE_NAME/.MainActivity
+}
 
-# Check if the APK file exists in the current directory
-if not os.path.isfile(APK_FILE):
-    print("Downloading Winlator APK...")
-    os.system(f'wget {APK_URL}')
+# Main function
+main() {
+    if is_app_installed; then
+        echo "App is already installed."
+    else
+        install_app
+    fi
+    launch_app
+}
 
-# Install the APK
-print("Installing Winlator...")
-os.system('pkg install termux-tools')
-os.system('termux-setup-storage')
-os.system('tsu')
-os.system(f'pm install {APK_FILE}')
-
-# Show the menu
-smgaming()
+# Call the main function
+main
